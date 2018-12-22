@@ -1,5 +1,6 @@
-# img_proc
-졸업프로젝트의 카메라 파트에서 어두운 이미지로 인한 인식률 저하를 개선하기 위한 알고리즘을 만들어 보았습니다. 
+# img_proc 
+I made camera brightness adjusting algorithm to get better detection in my capston project.
+This algorithm calulates mean, standard devation to get gaussian modeled 95% pixel range.
 
 Result
 =====
@@ -7,14 +8,13 @@ Result
 
 Method
 ======
-95%데이터를 포함하는  구간(평균±2𝜎)을 구한다음, 0~255로 다시 분포 시킴.
+Calculating 95% data range(m±2𝜎), relocate by (img-L)/(U-L)*255
 
 
-  - 𝑈=min⁡(255,𝑚+2𝜎) : 구간의 upper bound
-  - L=max(0,𝑚−2𝜎) : 구간의 lower bound
-  - 𝐼𝑚𝑔_𝑛𝑒𝑤=(𝐼𝑚𝑔_𝑜𝑟𝑖−𝐿)/(𝑈−𝐿)×255 : 95%구간으로 재조정된 이미지
+  - 𝑈=min⁡(255,𝑚+2𝜎) : 95% range upper bound
+  - L=max(0,𝑚−2𝜎) : 95% range lower bound
+  - 𝐼𝑚𝑔_𝑛𝑒𝑤=(𝐼𝑚𝑔_𝑜𝑟𝑖−𝐿)/(𝑈−𝐿)×255 : re-arranged img
 
+If standard deveation is large enough,i.e. L=0,U=255,will satisfying 𝐼𝑚𝑔_𝑛𝑒𝑤=𝐼𝑚𝑔_𝑜𝑟𝑖.
 
-표준편차가 큰 경우 L=0,U=255가 되므로, 𝐼𝑚𝑔_𝑛𝑒𝑤=𝐼𝑚𝑔_𝑜𝑟𝑖 를 만족하게됨
-
-어두운 부분이 관심대상이기 때문에 표준편차, 평균 계산시 pixel=0 or pixel>=127은 무시함
+In my case, interested area is dark (most objects are in darkpixel). So I ignored bright pixel (pixel>127) and also pixel=0 (black frame which is just occured by camera rectification). 
